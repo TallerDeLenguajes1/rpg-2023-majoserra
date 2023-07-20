@@ -38,4 +38,8 @@ public class Personaje
     public string? Apodo { get => apodo; set => apodo = value; }
     public DateTime Fecnac { get => fecnac; set => fecnac = value; }
     public int Edad { get => edad; set => edad = value; }
+    public string MostrarPersonaje()
+        {
+            return $" '{Apodo}'\n {Nombre} ---> {Tipo}\n Velocidad: {Velocidad}\n Destreza: {Destreza}\n Fuerza: {Fuerza}\n Nivel: {Nivel}\n Armadura: {Armadura}\n Salud: {Salud}";
+        }
 }
