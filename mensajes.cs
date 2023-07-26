@@ -5,11 +5,13 @@ public class Mensajes
 {
     public void bienvenida()
     {
-        Console.WriteLine("╔══════════════════════════════════════╗");
-        Console.WriteLine("║                                      ║");
-        Console.WriteLine("║              BIENVENIDOS             ║");
-        Console.WriteLine("║                                      ║");
-        Console.WriteLine("╚══════════════════════════════════════╝");
+        Console.WriteLine(@"
+██████╗░██╗███████╗███╗░░██╗██╗░░░██╗███████╗███╗░░██╗██╗██████╗░░█████╗░░██████╗
+██╔══██╗██║██╔════╝████╗░██║██║░░░██║██╔════╝████╗░██║██║██╔══██╗██╔══██╗██╔════╝
+██████╦╝██║█████╗░░██╔██╗██║╚██╗░██╔╝█████╗░░██╔██╗██║██║██║░░██║██║░░██║╚█████╗░
+██╔══██╗██║██╔══╝░░██║╚████║░╚████╔╝░██╔══╝░░██║╚████║██║██║░░██║██║░░██║░╚═══██╗
+██████╦╝██║███████╗██║░╚███║░░╚██╔╝░░███████╗██║░╚███║██║██████╔╝╚█████╔╝██████╔╝
+╚═════╝░╚═╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░╚══════╝╚═╝░░╚══╝╚═╝╚═════╝░░╚════╝░╚═════╝░");
         Thread.Sleep(1000);
 
     }
@@ -40,9 +42,9 @@ public class Mensajes
     {
         for (int i = 0; i < Lista.Count; i++)
         {
-            Console.WriteLine("╔═           ═╗");
-            Console.WriteLine($"   {Lista[i].Nombre}  ");
-            Console.WriteLine("╚═           ═╝");
+            Console.WriteLine(" ╔═           ═╗");
+            Console.WriteLine("     " + i + "-" + $"{Lista[i].Nombre}  ");
+            Console.WriteLine(" ╚═           ═╝");
 
         }
     }
@@ -75,15 +77,52 @@ public class Mensajes
         Console.WriteLine("");
         Console.WriteLine("╔══════════════════════════════════════╗");
         Console.WriteLine("  Su Caracteristicas son:               ");
-        Console.WriteLine($"   Apodo:              ");
+        Console.WriteLine($"   Apodo: {winner.Apodo}             ");
+        Console.WriteLine($"   Nombre: {winner.Nombre}            ");
+        Console.WriteLine($"   Edad: {winner.Edad}              ");
+        Console.WriteLine($"   Salud: {winner.Salud}             ");
+        Console.WriteLine($"   Nivel: {winner.Nivel}             ");
+        Console.WriteLine($"   Tipi: {winner.Tipo}             ");
         Console.WriteLine($"   Velocidad: {winner.Velocidad}     ");
-        Console.WriteLine($"   Destreza:  {winner.Destreza}     ");
-        Console.WriteLine($"   Fuerza: {winner.Fuerza}         ");
-        Console.WriteLine($"   Armadura: {winner.Armadura}               ");
+        Console.WriteLine($"   Destreza:  {winner.Destreza}      ");
+        Console.WriteLine($"   Fuerza: {winner.Fuerza}           ");
+        Console.WriteLine($"   Armadura: {winner.Armadura}       ");
+        Console.WriteLine("╚══════════════════════════════════════╝");
+        Thread.Sleep(1000);
+    }
+
+    public void Presentacion(List<Personaje> Lista)
+    {
+        Console.WriteLine("");
+        Console.WriteLine("╔══════════════════════════════════════╗");
+        for (int i = 0; i < Lista.Count; i++)
+        {
+            Console.WriteLine("    ________________________________      ");
+            Console.WriteLine($"   Apodo: {Lista[i].Apodo}             ");
+            Console.WriteLine($"   Nombre: {Lista[i].Nombre}            ");
+            Console.WriteLine($"   Edad: {Lista[i].Edad}              ");
+            Console.WriteLine($"   Salud: {Lista[i].Salud}             ");
+            Console.WriteLine($"   Nivel: {Lista[i].Nivel}             ");
+            Console.WriteLine($"   Tipi: {Lista[i].Tipo}             ");
+            Console.WriteLine($"   Velocidad: {Lista[i].Velocidad}     ");
+            Console.WriteLine($"   Destreza:  {Lista[i].Destreza}      ");
+            Console.WriteLine($"   Fuerza: {Lista[i].Fuerza}           ");
+            Console.WriteLine($"   Armadura: {Lista[i].Armadura}       ");
+            Console.WriteLine("    ________________________________      ");
+        }
         Console.WriteLine("╚══════════════════════════════════════╝");
         Thread.Sleep(1000);
 
-
+    }
+    public void gameover()
+    {
+        Console.WriteLine(@"
+░██████╗░░█████╗░███╗░░░███╗███████╗  ░█████╗░██╗░░░██╗███████╗██████╗░
+██╔════╝░██╔══██╗████╗░████║██╔════╝  ██╔══██╗██║░░░██║██╔════╝██╔══██╗
+██║░░██╗░███████║██╔████╔██║█████╗░░  ██║░░██║╚██╗░██╔╝█████╗░░██████╔╝
+██║░░╚██╗██╔══██║██║╚██╔╝██║██╔══╝░░  ██║░░██║░╚████╔╝░██╔══╝░░██╔══██╗
+╚██████╔╝██║░░██║██║░╚═╝░██║███████╗  ╚█████╔╝░░╚██╔╝░░███████╗██║░░██║
+░╚═════╝░╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝  ░╚════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝");
     }
 
 }

@@ -2,34 +2,58 @@
 using FabricaPersonajes;
 using System.Text.Json;
 using EspacioMensajes;
+using System;
+using EspacioTrivia;
+using System.IO;
 using System.Collections.Generic;
+using System.Net;
+using System.Text.Json.Serialization;
+using EspacioJson;
 internal class Program
 {
     private static void Main(string[] args)
     {
+        //creamos instancia para Mensajes
+        Mensajes msj = new Mensajes();
+        //creamos instancia para Preguntas
+        var Preguntas = new Root();
+        Preguntas = obtenerTrivia.Trivia();
+
+        //creamos instancia para PersonajesJson
+        PersonajesJson JsonArchivo = new(); //creamos una instanci
+
         //creamos una instancia para Random
         Random rand = new Random();
-        //creamos una instacia para lista personajes
-        List<Personaje> Lista = new List<Personaje>();
-        //creamos una instancia para fabrica de personajes
-        FabricaDePersonajes Crear = new();
-        //definimos la cantidad de personajes
-        int cantPersonajes = 10;
-        //cargamos la lista de los personajes
-        Lista = Crear.ListaPersonaje(cantPersonajes);
-        //guardamos los personajes en un archivo json
-        GuardarPersonajes(Lista, "Personajes.json");
-        //mostramos a los personajes
 
-        // for (int i = 0; i < cantPersonajes; i++)
-        // {
-        //     Console.WriteLine("╔═════════════════ Personaje {0} ════════════════╗", i); Console.WriteLine(Lista[i].MostrarPersonaje());
-        //     Console.WriteLine("╚══════════════════════════════════════════════╝");
-        // }
+        //todo CREACION PERSONAJE
 
-        //Presentamos a los Jugadores
+        List<Personaje> Lista = new List<Personaje>();//creamos una instacia para lista personajes
+
+        int cantPersonajes = 10;//definimos la cantidad de personajes
+        const string nombreArchivo = "Personajes.json"; //Nombre del Archivo
+
+        // Verificar al comienzo del Juego si existe el archivo de personajes:
+
+        if (JsonArchivo.Existe(nombreArchivo))
+        {
+            Lista = JsonArchivo.LeerPersonajes(nombreArchivo); //Si existe y tiene datos cargar los personajes desde el archivo existente. 
+        }
+        else
+        {
+            /* Si no existe generar 10 personajes utilizando la clase FabricaDePersonajes y
+            guárdelos en el archivo de personajes usando la clase PersonajesJson.*/
+            FabricaDePersonajes crear = new();
+            Lista = crear.ListaPersonaje(cantPersonajes);
+            JsonArchivo.GuardarPersonajes(Lista, nombreArchivo);
+        }
+
+        //todo PRESENTACION
+        //Presentamos a los Jugadores, Muestre por pantalla los datos y características de los personajes cargados.
+        msj.Presentacion(Lista);
+        //todo JUEGO
         //insetar mensaje de Bienvenida
-        Mensajes msj = new Mensajes();
+        Console.WriteLine("");
+        Console.WriteLine("");
         msj.bienvenida();
 
         msj.MostrarPersonaje(Lista);
@@ -40,73 +64,77 @@ internal class Program
         {
             msj.ElegirPersonaje();
             anda = int.TryParse(Console.ReadLine(), out seleccionado);
-        } while (seleccionado >= Lista.Count); //Controlamos que no se ingrese un personaje inexistente
+        } while (anda == false || seleccionado >= Lista.Count); //Controlamos que no se ingrese un personaje inexistente
 
         Console.Clear();
         if (anda)
         {
+            //* 1) Elija 2 personajes para que compitan entre ellos.
             var jugador = Lista[seleccionado];
             //eliminamos al jugador de la lista
             Lista.Remove(jugador);
+            //tenemos que elegir un Enemigo (Lo haremos de manera aleatoria)
             var Enemigo = Lista[rand.Next(0, Lista.Count)];
             Lista.Remove(Enemigo);
 
             int band = 1;
+            int k = 0;
 
             do
             {
-
                 msj.inicioBatalla();
-
-                //tenemos que elegir un Enemigo (Lo haremos de manera aleatoria)
-
                 msj.Nombre(jugador.Nombre, Enemigo.Nombre);
-
-                //SORTEAMOS QUIEN COMIENZA
+                Console.WriteLine("");
+                Console.WriteLine("Si Quieres comenzar deberas constestar una Pregunta con \"True o \"False\"");
+                Console.WriteLine("");
                 int inicio;
 
-                inicio = rand.Next(2);
+                Console.WriteLine("¿ " + Preguntas.results[k].question + " ?");
+                string? respuesta = Console.ReadLine();
+                if (Preguntas.results[k].correct_answer == respuesta)
+                {
+                    Console.WriteLine("╔═════════════════════════╗");
+                    Console.WriteLine("║  Correcto, Comenzas vos ║");
+                    Console.WriteLine("╚═════════════════════════╝");
+
+                    inicio = 0;
+                }
+                else
+                {
+                    Console.WriteLine("╔══════════════════════════════════╗");
+                    Console.WriteLine("║  Incorrecto, Comienza el Enemigo ║");
+                    Console.WriteLine("╚══════════════════════════════════╝");
+                    inicio = 1;
+                }
+                k++;
                 //BATALLA
 
                 do
                 {
+                    //* 2) El combate se realiza por turnos. Por cada turno un personaje ataca y el otro se defiende
                     //constante de Ajuste
-                    int constAjuste = 500;
                     if (inicio == 0)
                     {
-                        int ataque = jugador.Destreza * jugador.Fuerza * jugador.Nivel;
-                        int efectividad = rand.Next(1, 101);
-
-                        int defensa = Enemigo.Armadura * Enemigo.Velocidad;
-
-                        int danioprovocado = ((ataque * efectividad) - defensa) / constAjuste;
-
-                        Enemigo.Salud -= danioprovocado;
+                        int danioprovocado = Batalla(jugador, Enemigo);
+                        Enemigo.Salud = Enemigo.Salud - danioprovocado;
                         inicio = 1;
                     }
                     else
                     {
-                        int ataque = Enemigo.Destreza * Enemigo.Fuerza * Enemigo.Nivel;
-                        int efectividad = rand.Next(1, 101);
-
-                        int defensa = jugador.Armadura * jugador.Velocidad;
-
-                        int danioprovocado = ((ataque * efectividad) - defensa) / constAjuste;
-
+                        int danioprovocado = Batalla(Enemigo, jugador);
                         jugador.Salud -= danioprovocado;
-
                         inicio = 0;
                     }
-
-                } while (jugador.Salud >= 0 && Enemigo.Salud >= 0);
-
-                Console.WriteLine("Salud Jugador: " + jugador.Salud);
-                Console.WriteLine("salud Enemigo: " + Enemigo.Salud);
-
+                } while (jugador.Salud >= 0 && Enemigo.Salud >= 0); //*3) El combate se mantiene hasta que uno es vencido (salud <= 0)
+                Console.WriteLine("╔══════════════════════════════════╗");
+                Console.WriteLine("  Salud de " + jugador.Nombre + ":" + jugador.Salud);
+                Console.WriteLine("  Salud de " + Enemigo.Nombre + ":" + Enemigo.Salud);
+                Console.WriteLine("╚══════════════════════════════════╝");
 
                 if (jugador.Salud > 0) //jugador gano
                 {
                     msj.Ganaste();
+                    //* 5) El que gane será beneficiado con una mejora en sus habilidades (En este caso recargamos vida)
                     jugador.Salud = 100; //recargamos vida
                     if (Lista.Count != 0)
                     {
@@ -133,8 +161,9 @@ internal class Program
                         do
                         {
                             msj.ElegirPersonaje();
-                            func = int.TryParse(Console.ReadLine(), out cambio);
-                        } while (cambio >= Lista.Count); //Controlamos que no se ingrese un personaje inexistente
+                            string? input = Console.ReadLine();
+                            func = int.TryParse(input, out cambio);
+                        } while (cambio >= Lista.Count || func == false); //Controlamos que no se ingrese un personaje inexistente
 
                         if (func)
                         {
@@ -146,10 +175,9 @@ internal class Program
                     {
                         band = 0;
                     }
-
                 }
-
-
+                Thread.Sleep(1200);
+                Console.Clear();
 
             } while (Lista.Count >= 0 && band != 0);
             var Ganador = new Personaje();
@@ -164,46 +192,27 @@ internal class Program
             }
             msj.MensajeGanador(Ganador);
         }
-
-
-
-
-
-    }
-    public static void GuardarPersonajes(List<Personaje> listaPersonajes, string nombreArchivo)
-    {
-        string personajesJson = JsonSerializer.Serialize(listaPersonajes);
-        using (FileStream archivoAbierto = new(nombreArchivo, FileMode.OpenOrCreate))
+        else
         {
-            using (StreamWriter archivoEscribir = new(archivoAbierto))
-            {
-                archivoEscribir.WriteLine(personajesJson);
-                archivoEscribir.Close();
-            }
+            Console.WriteLine("No se ingreso un numero corectamente, vuelve a intentarlo");
         }
+        Thread.Sleep(2000);
+        Console.Clear();
+        msj.gameover();
+
     }
-    public List<Personaje>? LeerPersonajes(string nombreArchivo)
+    public static int Batalla(Personaje jugador, Personaje Enemigo)
     {
-        string documentoJson;
-        using (FileStream archivoAbierto = new(nombreArchivo, FileMode.Open))
-        {
-            using (StreamReader archivoLeer = new(archivoAbierto))
-            {
-                documentoJson = archivoLeer.ReadToEnd();
-                archivoLeer.Close();
-            }
-        }
-        var listadoPersonajes = JsonSerializer.Deserialize<List<Personaje>>(documentoJson);
-        return listadoPersonajes;
+        int constAjuste = 500;
+        Random rand = new Random();
+        int ataque = jugador.Destreza * jugador.Fuerza * jugador.Nivel;
+        int efectividad = rand.Next(1, 101);
+
+        int defensa = Enemigo.Armadura * Enemigo.Velocidad;
+
+        int danioprovocado = ((ataque * efectividad) - defensa) / constAjuste;
+        return danioprovocado;
     }
-    /*public bool Existe(string nombreArchivo)
-        {
-            if (File.Exists(nombreArchivo))
-            {
-                FileInfo fileInfo = new(nombreArchivo);
-                return fileInfo.Length > 0;
-            }
-            return false;
-        }*/
+
 }
 

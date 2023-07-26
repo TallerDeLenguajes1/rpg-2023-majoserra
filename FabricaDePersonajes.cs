@@ -1,5 +1,7 @@
 using Personajes;
 using System.Collections.Generic;
+
+//* 1) Genere una clase para poder crear personajes aleatorios que se llame FabricaDePersonajes 
 namespace FabricaPersonajes
 {
     public class FabricaDePersonajes

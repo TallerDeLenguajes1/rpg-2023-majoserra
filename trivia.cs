@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 namespace EspacioTrivia;
 // Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
+// Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
 public class Result
 {
     [JsonPropertyName("category")]
