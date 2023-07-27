@@ -1,13 +1,9 @@
-﻿using Personajes;
+﻿using System;
+using Personajes;
 using FabricaPersonajes;
-using System.Text.Json;
 using EspacioMensajes;
-using System;
 using EspacioTrivia;
-using System.IO;
 using System.Collections.Generic;
-using System.Net;
-using System.Text.Json.Serialization;
 using EspacioJson;
 internal class Program
 {
@@ -48,6 +44,7 @@ internal class Program
         }
 
         //todo PRESENTACION
+        msj.PersonajesMensaje();
         //Presentamos a los Jugadores, Muestre por pantalla los datos y características de los personajes cargados.
         msj.Presentacion(Lista);
         //todo JUEGO
@@ -55,6 +52,7 @@ internal class Program
         Console.WriteLine("");
         Console.WriteLine("");
         msj.bienvenida();
+
 
         msj.MostrarPersonaje(Lista);
 
@@ -82,7 +80,6 @@ internal class Program
 
             do
             {
-                msj.inicioBatalla();
                 msj.Nombre(jugador.Nombre, Enemigo.Nombre);
                 Console.WriteLine("");
                 Console.WriteLine("Si Quieres comenzar deberas constestar una Pregunta con \"True o \"False\"");
@@ -92,12 +89,12 @@ internal class Program
                 Console.WriteLine("¿ " + Preguntas.results[k].question + " ?");
                 Console.WriteLine("");
                 string? respuesta = Console.ReadLine();
-                if (Preguntas.results[k].correct_answer == respuesta)
+                if (Preguntas.results[k].correct_answer == respuesta) //* si contestamos bien, ademas de comenzar, recargamos vida
                 {
                     Console.WriteLine("╔═════════════════════════╗");
                     Console.WriteLine("║  Correcto, Comenzas vos ║");
                     Console.WriteLine("╚═════════════════════════╝");
-
+                    jugador.Salud = jugador.Salud + 10;
                     inicio = 0;
                 }
                 else
@@ -137,10 +134,14 @@ internal class Program
                     msj.Ganaste();
                     //* 5) El que gane será beneficiado con una mejora en sus habilidades (En este caso recargamos vida)
                     jugador.Salud = 100; //recargamos vida
+                    if (jugador.Fuerza < 10)
+                    {
+                        jugador.Fuerza = jugador.Fuerza + 1; //Si nuestro jugador gana se vera beneficiado con  uno mas de fuerza
+                    }
                     if (Lista.Count != 0)
                     {
-                        Enemigo = Lista[rand.Next(0, Lista.Count)];
-                        Lista.Remove(Enemigo);
+                        Enemigo = Lista[rand.Next(0, Lista.Count)]; //*Seleccionamos un Enemigo (Siguiente Ronda)
+                        Lista.Remove(Enemigo); //*Eliminamos de la Lista
                     }
                     else
                     {
@@ -177,7 +178,7 @@ internal class Program
                         band = 0;
                     }
                 }
-                Thread.Sleep(1200);
+                Thread.Sleep(1500);
                 Console.Clear();
 
             } while (Lista.Count >= 0 && band != 0);
@@ -197,7 +198,7 @@ internal class Program
         {
             Console.WriteLine("No se ingreso un numero corectamente, vuelve a intentarlo");
         }
-        Thread.Sleep(2000);
+        Thread.Sleep(2500);
         Console.Clear();
         msj.gameover();
 
