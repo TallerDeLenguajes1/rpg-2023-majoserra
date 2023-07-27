@@ -108,6 +108,7 @@ public class Mensajes
             Console.WriteLine($"   Destreza:  {Lista[i].Destreza}      ");
             Console.WriteLine($"   Fuerza: {Lista[i].Fuerza}           ");
             Console.WriteLine($"   Armadura: {Lista[i].Armadura}       ");
+            Console.WriteLine($"   Fecha Nacimiento: {Lista[i].Fecnac}");
             Console.WriteLine("    ________________________________      ");
         }
         Console.WriteLine("╚══════════════════════════════════════╝");

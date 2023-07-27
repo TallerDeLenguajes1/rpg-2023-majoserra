@@ -90,6 +90,7 @@ internal class Program
                 int inicio;
 
                 Console.WriteLine("¿ " + Preguntas.results[k].question + " ?");
+                Console.WriteLine("");
                 string? respuesta = Console.ReadLine();
                 if (Preguntas.results[k].correct_answer == respuesta)
                 {
