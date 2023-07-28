@@ -50,6 +50,7 @@ internal class Program
         //insetar mensaje de Bienvenida
         int opcion = 1;
         int selec;
+        bool anda1;
         while (opcion == 1)
         {
             Console.Clear();
@@ -57,8 +58,8 @@ internal class Program
             msj.Menu();
             do
             {
-                int.TryParse(Console.ReadLine(), out selec);
-            } while (selec > 2);
+                anda1 = int.TryParse(Console.ReadLine(), out selec);
+            } while (selec > 2 || anda1 == false);
 
             switch (selec)
             {
@@ -229,10 +230,11 @@ internal class Program
             Console.WriteLine("╔════════════════════════════════════════════════════════╗");
             Console.WriteLine("  Desea volver al menu o salir? (menu = 1) (salir = 0) ");
             Console.WriteLine("╚════════════════════════════════════════════════════════╝");
+            bool anda2;
             do
             {
-                int.TryParse(Console.ReadLine(), out opcion);
-            } while (opcion > 2);
+                anda2 = int.TryParse(Console.ReadLine(), out opcion);
+            } while (anda2 == false || opcion > 1);
 
             if (opcion == 0)
             {
