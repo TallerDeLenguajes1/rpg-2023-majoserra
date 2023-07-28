@@ -25,6 +25,30 @@ public class Mensajes
         Thread.Sleep(1000);
 
     }
+    public void batalla()
+    {
+        Console.WriteLine(@"
+██████╗░░█████╗░████████╗░█████╗░██╗░░░░░██╗░░░░░░█████╗░
+██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗██║░░░░░██║░░░░░██╔══██╗
+██████╦╝███████║░░░██║░░░███████║██║░░░░░██║░░░░░███████║
+██╔══██╗██╔══██║░░░██║░░░██╔══██║██║░░░░░██║░░░░░██╔══██║
+██████╦╝██║░░██║░░░██║░░░██║░░██║███████╗███████╗██║░░██║
+╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═╝░░╚═╝╚══════╝╚══════╝╚═╝░░╚═╝");
+    }
+    public void Menu()
+    {
+
+        Console.WriteLine("");
+        Console.WriteLine("╔════════════════════════════════════╗");
+        Console.WriteLine("║               MENU                 ║");
+        Console.WriteLine("║                                    ║");
+        Console.WriteLine("║         0.-Ver Personajes          ║");
+        Console.WriteLine("║         1.-Jugar Combate           ║");
+        Console.WriteLine("║         2.-Salir                   ║");
+        Console.WriteLine("║                                    ║");
+        Console.WriteLine("║   Ingrese una opcion:              ║");
+        Console.WriteLine("╚════════════════════════════════════╝");
+    }
     public void ElegirPersonaje()
     {
         Console.WriteLine("╔═════════════════════╗");
@@ -39,7 +63,6 @@ public class Mensajes
         Console.WriteLine("║            COMIENZA EL             ║");
         Console.WriteLine("║           ENFRETAMIENTO            ║");
         Console.WriteLine("╚════════════════════════════════════╝");
-
     }
     public void Nombre(string jugador, string enemigo)
     {
@@ -136,7 +159,7 @@ public class Mensajes
         Console.WriteLine($"   Edad: {winner.Edad}              ");
         Console.WriteLine($"   Salud: {winner.Salud}             ");
         Console.WriteLine($"   Nivel: {winner.Nivel}             ");
-        Console.WriteLine($"   Tipi: {winner.Tipo}             ");
+        Console.WriteLine($"   Tipo: {winner.Tipo}             ");
         Console.WriteLine($"   Velocidad: {winner.Velocidad}     ");
         Console.WriteLine($"   Destreza:  {winner.Destreza}      ");
         Console.WriteLine($"   Fuerza: {winner.Fuerza}           ");
